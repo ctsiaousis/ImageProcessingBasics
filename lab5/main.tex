@@ -1,0 +1,125 @@
+\documentclass[11pt]{scrartcl} % Font size
+
+\input{structure.tex} % Include the file specifying the document structure and custom commands
+\input{matlab.tex}
+
+\usepackage{fontspec}
+\setmainfont{Tinos Nerd Font} %nice font for english and greek
+
+\usepackage{hyperref} %for hyperlinks
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\title{
+	\normalfont\normalsize
+	\textsc{Technical University of Crete, ECE}\\ % Your university, school and/or department name(s)
+	\vspace{25pt} % Whitespace
+	\rule{\linewidth}{0.5pt}\\ % Thin top horizontal rule
+	\vspace{20pt} % Whitespace
+	{\Huge Digital Image Processing}\\ % The assignment title
+
+	{\huge Fifth Lab Report}\\ % The assignment title
+	\vspace{12pt} % Whitespace
+	\rule{\linewidth}{2pt}\\ % Thick bottom horizontal rule
+	\vspace{12pt} % Whitespace
+}
+
+\author{\LARGE{Τσιαούσης Χρήστος}\\
+		\texttt{2016030017}
+		\and
+		\LARGE{Πρωτοπαπαδάκης Γιώργος}\\
+		\texttt{2016030134}}% Your name
+
+\date{\normalsize\today} % Today's date (\today) or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+\section{Σκοπός Εργαστηρίου}
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.4\paperwidth]{cell.png}}
+    \caption{Original Image.}
+\end{figure}
+
+Το εργαστήριο έχει ως σκοπό την εξοικείωση μας με τις έννοιες μορφολογικής επεξεργασίας εικόνας. Πιο συγκεκριμένα καλούμαστε
+να αναγνωρίσουμε το περίγραμμα του παραπάνω κυττάρου με ακρίβεια. Αυτό θα το επιχειρήσουμε χρησιμοποιώντας την μέθοδο Otsu
+καθώς και μορφολογικές τεχνικές όπως erode και dilate συνδιασμένες με ποικίλα structuring elements.
+
+\section{Ανάλυση}
+
+\subsection{Max - Min}
+Πριν εφαρμόσουμε την μέθοδο του Otsu, έπρεπε να γίνει ένα edge detection στην φωτογραφία, καθώς αν δεν το κάναμε θα είχαμε
+μόνο την φωτεινή μεριά του περιγράμματος. Μετά απο αρκετό πειραματισμό, καθώς δεν θελαμε να χρησιμοποιήσουμε την μέθοδο
+\textit{edge()} του matlab, καταλήξαμε να χρησιμοποιούμε τεχνικές από το προηγούμενο εργαστήριο. Πιο συγκεκριμένα, εξάγαμε
+τις ελάχιστες τιμές της εικόνας και τις αφαιρέσαμε από τις μέγιστες χρησιμοποιώντας έναν 5x5 kernel. Αυτό μας έδωσε ένα
+ομοιόμορφο περίγραμμα από το οποίο και μείναμε ικανοποιημένοι. Κάτι αντίστοιχο θα μπορούσε ίσως να επιτευχθεί χρησιμοποιόντας
+και την αντίστοιχη διαφορά από morphological opening και closing. Στο παρακάτω figure, μπορεί κανείς να δει τα αποτελέσματά μας.
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=\paperwidth]{1.jpg}}
+    \caption{Our Edge Detection Approach.}
+\end{figure}
+\clearpage
+
+\subsection{EdgeDetection and Otsu}
+Στην συνέχεια, χρησιμοποιήσαμε πάνω στο παραπάνω αποτέλεσμα την υλοποίησή μας από το προηγούμενο εργαστήριο για
+edge-detection χρησιμοποιώντας το φίλτρο F=[-1 0 1] και την συνάρτηση μας \textit{convolution\_bonus()}. Τέλος,
+χρησιμοποιήσαμε στο αποτέλεσμα αυτό τις συναρτήσεις \textit{graythresh()} και \textit{im2bw()} προκειμένου
+να εξάγουμε ένα κατώφλι και να κάνουμε την εικόνα binary.
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=\paperwidth]{2.jpg}}
+    \caption{Otsu Method Result.}
+\end{figure}
+\clearpage
+
+\subsection{Contour Connection}
+Λόγω τις προηγούμενης επεξεργασίας, έχουμε ήδη ένα αρκετά καλό αποτέλεσμα και θα μπορούσαμε να συνεχίσουμε έτσι στο επόμενο
+βήμα. Παρ` όλ' αυτά, επιλέξαμε να χρησιμοποιήσουμε ένα structuring element δίσκου ακτίνας 12 ως όρισμα στη συνάρτηση
+\textit{imtophat()} και πήραμε ένα μικρό, αλλά αποτελεσματικό smoothing στο περίγραμμα. έπειτα χρησιμοποιήσαμε την
+\textit{imfill()} με το όρισμα `holes' και έτσι είχαμε πλέον αναγνωρήσει όλη την περιοχή του κυττάρου. Το αποτέλεσμα
+φαίνεται παρακάτω.
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=\paperwidth]{3.jpg}}
+    \caption{Dilate and fill.}
+\end{figure}
+\clearpage
+
+\subsection{Erode}
+Μετα, έπρεπε να μικρύνουμε ελαφώς το περίγραμμα καθώς λόγω της μεθοδολογίας μας ήταν ελαφρώς διογκωμένο.
+Επιλέξαμε να χρησιμοποιήσουμε δύο φορές την \textit{imerode('diamond',1)}, χρησιμοποιήθηκε το συγκεκριμένο
+structuring element επειδή θέλαμε να εφαρμοστεί κυρίως στις έντονες καμπύλες του περιγράμματος.
+
+Και τέλος αφαιρέσαμε το κύταρρο που δεν θέλαμε να αναγνωρίσουμε μέσω της συνάρτησης \textit{imerode}.
+
+Παρακάτω φαίνονται τα τελικά μας αποτελέσματα.
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=\paperwidth]{4.jpg}}
+    \caption{Eroded, cleared-boarder and results.}
+\end{figure}
+\clearpage
+
+\clearpage
+\section{Κώδικας}
+\matlabscript {main_5}{Η main.}
+\matlabscript {convolution_bonus}{Η συνάρτηση edge-detection.}
+\matlabscript {Compute_Min}{Η συνάρτηση Compute Min.}
+\matlabscript {Compute_Max}{Η συνάρτηση Compute Max.}
+
+\end{document}

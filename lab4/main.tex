@@ -1,0 +1,193 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Wenneker Assignment
+% LaTeX Template
+% Version 2.0 (12/1/2019)
+%
+% This template originates from:
+% http://www.LaTeXTemplates.com
+%
+% Authors:
+% Vel (vel@LaTeXTemplates.com)
+% Frits Wenneker
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[11pt]{scrartcl} % Font size
+
+\input{structure.tex} % Include the file specifying the document structure and custom commands
+\input{matlab.tex}
+
+\usepackage{fontspec}
+\setmainfont{Tinos Nerd Font} %nice font for english and greek
+
+\usepackage{hyperref} %for hyperlinks
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\title{
+	\normalfont\normalsize
+	\textsc{Technical University of Crete, ECE}\\ % Your university, school and/or department name(s)
+	\vspace{25pt} % Whitespace
+	\rule{\linewidth}{0.5pt}\\ % Thin top horizontal rule
+	\vspace{20pt} % Whitespace
+	{\Huge Digital Image Processing}\\ % The assignment title
+
+	{\huge Fourth Lab Report}\\ % The assignment title
+	\vspace{12pt} % Whitespace
+	\rule{\linewidth}{2pt}\\ % Thick bottom horizontal rule
+	\vspace{12pt} % Whitespace
+}
+
+\author{\LARGE{Τσιαούσης Χρήστος}\\
+		\texttt{2016030017}
+		\and
+		\LARGE{Πρωτοπαπαδάκης Γιώργος}\\
+		\texttt{2016030134}}% Your name
+
+\date{\normalsize\today} % Today's date (\today) or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	FIGURE EXAMPLE
+%----------------------------------------------------------------------------------------
+
+\section{Σκοπός Εργαστηρίου}
+
+Το εργαστήριο έχει ως σκοπό την περεταίρω εξοικείωση μας με την συνέλιξη σε δισδιάστατα σήματα όπως μια grayscale εικόνα καθώς και την κατανόηση του
+θορύβου και πως μπορούμε να τον μειώσουμε. Δηλαδή φίλτράρισμα για μείωση θορύβου και για εμφάνιση πληροφορίας.
+%------------------------------------------------
+
+\section{Excersize 1}
+
+Για την κατασκευή της Compute Median, αξιοποιήσαμε την συνάρτηση της συνέλιξης, που είχαμε υλοποιήσει στα προηγούμενα εργαστήρια, καθώς και την συνάρτηση
+των paddings. Η μόνη παραλλαγή είναι οτι αντί να αθροίσουμε τα επι μέρους κελιά, τα μετατρέπουμε σε ένα μονοδιάστατο πίνακα και παίρνουμε την μεσαία τιμή.
+
+Το αποτέλεσμα είναι να αγνοείται περισσότερος θόρυβος, όσο περισσότερο αυξάνεται το μέγεθος του φίλτρου.
+
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.7\paperwidth]{3x3.jpg}}
+    \caption{Οι εικόνες με φίλτρο 3x3.}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.7\paperwidth]{5x5.jpg}}
+    \caption{Οι εικόνες με φίλτρο 5x5.}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.7\paperwidth]{9x9.jpg}}
+    \caption{Οι εικόνες με φίλτρο 9x9.}
+\end{figure}
+
+
+\clearpage
+\subsection*{Κώδικας συνάρτηση Compute Median}
+\matlabscript {Compute_Median}{Η συνάρτηση Compute Median.}
+
+\clearpage
+\section{Excersize 2}
+
+Η διαδικασία είναι όμοια με αυτήν της πρώτης άσκησης, με την διαφορά πως στην περίπτωση του Minimum, εισάγουμε το πρώτο κελί του sorted 1D-array
+στον πίνακα επιστροφής, ενώ για την Maximum το τελευταίο. Βλέπουμε ότι καθώς αυξάνουμε το μέγεθος του φίλτρου, αυξάνεται και η πιθανότητα για ακραίες
+τιμές, με αποτέλεσμα στην περίπτωση του \textit{9x9}, το computeMin να δείνει σχεδόν καθολικά μαύρο (τιμή 0 στο colorbar), και αντίστοιχα
+το computeMax σχεδόν παντού 255 (άσπρο).
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.7\paperwidth]{3x3_1.jpg}}
+    \caption{Η πρώτη εικόνα με φίλτρο 3x3.}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.7\paperwidth]{3x3_2.jpg}}
+    \caption{Η δεύτερη εικόνα με φίλτρο 3x3.}
+\end{figure}
+
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.7\paperwidth]{5x5_1.jpg}}
+    \caption{Η πρώτη εικόνα με φίλτρο 5x5.}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.7\paperwidth]{5x5_2.jpg}}
+    \caption{Η δεύτερη εικόνα με φίλτρο 5x5.}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.7\paperwidth]{9x9_1.jpg}}
+    \caption{Η πρώτη εικόνα με φίλτρο 9x9.}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.7\paperwidth]{9x9_2.jpg}}
+    \caption{Η δεύτερη εικόνα με φίλτρο 9x9.}
+\end{figure}
+
+\clearpage
+\subsection*{Κώδικες συναρτήσεων Compute Mix/Max}
+
+\matlabscript {Compute_Min}{Η συνάρτηση Compute Minimum.}
+\matlabscript {Compute_Max}{Η συνάρτηση Compute Maximum.}
+
+\clearpage
+\section{Bonus Excersize}
+
+Τέλος, υλοποιήσαμε ένα edge-detecting φίλτρο βάσει του \[ F = [-1 0 1]\] το οποίο μένει ως έχει και συνελίσεται μια φορά με την εικόνα,
+κι έπειτα κάνουμε περιστροφή 90$^{\circ}$ και συνελίσουμε ακόμα μία φορά. Το αποτέλεσμα είναι το παρακάτω
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.7\paperwidth]{bonus.jpg}}
+    \caption{Η εικόνα της έξτρα άσκησης.}
+\end{figure}
+
+\clearpage
+\subsection*{Κώδικας συνάρτησης Bonus}
+
+\matlabscript {convolution_bonus}{Η συνάρτηση που συνελίσει με μη-τετραγωνικό μονοδιάστατο φίλτρο.}
+
+% \newpage
+
+\section{Συμπεράσματα}
+Οι δυνατότητες της ψηφιακής επεξεργασίας εικόνας με παραλλαγές της συνέλιξης, διαφορετικών φίλτρων, και διαφορετικής σειράς
+εφαρμογής, είναι άπειρες. Μπορούμε να ενισχύσουμε κατ επιλογίν όποιο κομμάτι πληροφορίας επιλέξουμε. Μπορούμε να ενισχύσουμε
+την χρήσιμη πληροφορία, τον θόρυβο ή τις ακμές.
+
+
+\section{Ο κώδικας που υλοποίησε τα παραπάνω}
+
+
+\matlabscript {main_4}{Main function for excersize 1.}
+
+\matlabscript {main_4_2}{Main function for excersize 2.}
+
+\matlabscript {bonus_main}{Main function for bonus excersize.}
+
+\matlabscript {padForConv}{Η υλοποίησή μας για τα paddings}
+
+\matlabscript {convolution}{Η υλοποίησή μας για την συνέλιξη}
+
+\end{document}

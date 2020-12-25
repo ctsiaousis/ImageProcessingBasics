@@ -1,0 +1,195 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Wenneker Assignment
+% LaTeX Template
+% Version 2.0 (12/1/2019)
+%
+% This template originates from:
+% http://www.LaTeXTemplates.com
+%
+% Authors:
+% Vel (vel@LaTeXTemplates.com)
+% Frits Wenneker
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[11pt]{scrartcl} % Font size
+
+\input{structure.tex} % Include the file specifying the document structure and custom commands
+\input{matlab.tex}
+
+\usepackage{fontspec}
+\setmainfont{Tinos Nerd Font} %nice font for english and greek
+
+\usepackage{hyperref} %for hyperlinks
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\title{
+	\normalfont\normalsize
+	\textsc{Technical University of Crete, ECE}\\ % Your university, school and/or department name(s)
+	\vspace{25pt} % Whitespace
+	\rule{\linewidth}{0.5pt}\\ % Thin top horizontal rule
+	\vspace{20pt} % Whitespace
+	{\Huge Digital Image Processing}\\ % The assignment title
+
+	{\huge Second Lab Report}\\ % The assignment title
+	\vspace{12pt} % Whitespace
+	\rule{\linewidth}{2pt}\\ % Thick bottom horizontal rule
+	\vspace{12pt} % Whitespace
+}
+
+\author{\LARGE{Τσιαούσης Χρήστος}\\
+		\texttt{2016030017}
+		\and
+		\LARGE{Πρωτοπαπαδάκης Γιώργος}\\
+		\texttt{2016030134}}% Your name
+
+\date{\normalsize\today} % Today's date (\today) or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	FIGURE EXAMPLE
+%----------------------------------------------------------------------------------------
+
+\section{Σκοπός Εργαστηρίου}
+
+\begin{figure}[h] % [h] forces the figure to be output where it is defined in the code (it suppresses floating)
+	\centering
+	\includegraphics[width=0.5\columnwidth]{gray.jpg} % Example image
+	\caption{Αρχική εικόνα.}
+\end{figure}
+
+
+Το εργαστήριο έχει ως σκοπό την εξοικείωση μας με την συνέλιξη σε δισδιάστατα σήματα όπως μια grayscale εικόνα συνελιγμένη με ένα δισδιάστατο kernel/φίλτρο.
+Βλέπουμε τους λόγους που χρειάζεται να μεγαλώσουμε τις διαστάσεις μιας εικόνας ανάλογα το μέγεθος του φίλτρου και μελετάμε δύο διαφορετικές πρακτικές
+padding. Συγκεκριμένα την συμπλήρωση με μηδενικά και την αντιγραφή των ακριανών pixel. Συγκρίνουμε τις πρακτικές αυτές μέσω της σηματοθορυβικής
+σχέσης μεταξύ της αρχικής και παραγώμενης εικόνας, και του μέσου τετραγωνικού σφάλματος αντίστοιχα, όπως είδαμε και στο προηγούμενο εργαστήριο.
+Επιπλέον, υλοποίηση γίνεται με την χρήση τριών διαφορετικούς συναρτήσεων.
+\begin{enumerate}
+  \item convolution(), η δική μας υλοποίηση της συνέλιξης δύο διαστάσεων.
+  \item conv2(), η συνάρτηση του matlab για σήματα δύο διαστάσεων.
+  \item imfilter(), η συνάρτηση του matlab για φιλτράρισμα εικώνων.
+\end{enumerate}
+Θεωρητικά, θα πρέπει και οι τρεις συναρτήσεις να παράξουν τα ίδια σφάλματα.
+%------------------------------------------------
+
+\subsection{Υλοποίηση της convolution}
+
+Αρχικά από τις διαστάσεις της εικόνας με τα paddings και τις διαστάσεις του φίλτρου, υπολογίζουμε τις διαστάσεις της
+καινούριας εικόνας. Έπειτα περιστρέφουμε το array του φίλτρου κατά 180$^{\circ}$ έτσι ώστε να γίνει η αναστροφή ``χιαστή''
+που συζητήθηκε στο εργαστήριο. Τέλος, γεμίζουμε με μηδενικά τον πίνακα επιστροφής και ξεκινάμε τον υπολογισμό με δύο
+εμφωλευμένα for loops. Για κάθε κελί του τελικού πίνακα, παίρνουμε ένα \textit{3x3} subsection του padded πίνακα και το
+πολλαπλασιάζουμε στοιχείο-στοιχείο με το αναστραμένο φίλτρο.
+
+\matlabscript {convolution}{Η υλοποίησή μας για την συνέλιξη}
+
+\subsection{Υλοποίηση της padding}
+
+Για την δημιουργία του πίνακα με τα επιπλέον περιθώρια, υλοποιήσαμε μια συνάρτηση η οποία δημιουργεί τέτοιες εικόνες για
+οποιοδήποτε τετραγωνικό φίλτρο. Σε αυτήν, αρχικά υπολογίζουμε σύμφωνα με τους τύπους το καινούριο μέγεθος του πίνακα και
+τον γεμίζουμε με μηδενικά. Έπειτα ελέγχουμε το κείμενο εισόδου, αν είναι \textit{zero}, τότε γεμίζουμε τα περιθώρια με μηδενικά
+με την χρήση for loop, αν είναι \textit{fill}, κάνουμε replicate τα ακριανά pixel με χρήση της συνάρτησης padarray του
+matlab, αλλιώς επιστρέφουμε σφάλμα.
+
+\matlabscript {padForConv}{Η υλοποίησή μας για τα paddings}
+
+\section{Συγκρίσεις και πειραματικά αποτελέσματα}
+
+Αρχικά από την εικόνα μας, δημιουργούμε τα δύο διαφορετικά paddings με την χρήση της συνάρτησής μας. Έπειτα ακολουθεί
+μια trivial διαδικασία, όπου παίρνουμε για κάθε μέθοδο padding και για κάθε συνάρτηση τις καινούριες εικόνες. Σε αυτό
+το στάδιο παρατηρούμε ότι το γκαουσσιανό φίλτρο εξομαλύνει τα edges. Τελικά, με reference την αρχική μας εικόνα, και
+με την χρήση των \textit{immse} και \textit{psnr}, εξάγουμε τις τιμες των σφαλμάτων.
+
+
+Ας δούμε οπτικά τα αποτελέσματα.
+
+\begin{figure}[h] % [h] forces the figure to be output where it is defined in the code (it suppresses floating)
+	\centering
+	\includegraphics[width=\columnwidth]{1.jpg} % Example image
+	\caption{Με την χρήση της μεθόδου μας.}
+\end{figure}
+
+\begin{figure}[h] % [h] forces the figure to be output where it is defined in the code (it suppresses floating)
+	\centering
+	\includegraphics[width=\columnwidth]{2.jpg} % Example image
+	\caption{Με την χρήση της conv2().}
+\end{figure}
+
+\begin{figure}[h] % [h] forces the figure to be output where it is defined in the code (it suppresses floating)
+	\centering
+	\includegraphics[width=\columnwidth]{3.jpg} % Example image
+	\caption{Με την χρήση της imfilter().}
+\end{figure}
+
+
+\clearpage
+\newpage
+
+\section{Τελικά αποτελέσματα}
+
+Επιβεβαιώνεται η θεωρητική μας πρόβλεψη. Όλες οι συναρτήσεις δημιουργούν τις ίδιες εικόνες και άρα
+τα σφάλματα είναι κοινά για κάθε μέθοδο.
+\begin{table}[h] % [h] forces the table to be output where it is defined in the code (it suppresses floating)
+	\centering % Centre the table
+	\begin{tabular}{l c c c}
+		\toprule
+		\textit{σφάλμα/padding} & \textbf{convolute()} & \textbf{conv2()} & \textbf{imfilter()} \\
+		\midrule
+		\midrule
+		MSE (zero) & 25.25 & 25.25 & 25.25 \\
+		MSE (fill) & 17.24 & 17.24 & 17.24 \\
+		\midrule
+		PSNR (zero) & 34.11 & 34.11 & 34.11 \\
+		PSNR (fill) & 35.76 & 35.76 & 35.76 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Τα τελικά σφάλματα.}
+\end{table}
+
+\begin{figure}[h] % [h] forces the figure to be output where it is defined in the code (it suppresses floating)
+	\centering
+	\includegraphics[width=\columnwidth]{4.jpg} % Example image
+	\caption{Ενδεικτικά, το output της εεφαρμογής μας στην κονσόλα του matlab.}
+\end{figure}
+
+
+\section{Σύγκριση των τριών συναρτήσεων.}
+
+Εφ' όσων στην δική μας υλοποίηση κάνουμε περιστροφή του φίλτρου και βγάζουμε ίδια σφάλματα μπορούμε
+να συμπεράνουμε ότι η μεθοδολογία αυτή είναι κοινή και για τις άλλες δύο συναρτήσεις.
+
+
+Για κοινές εξόδους από τις συναρτήσεις, ας συγκρίνουμε τις εισόδους
+\begin{enumerate}
+  \item \textbf{convolution()} Παίρνει ως είσοδο την εικόνα \underline{με} τα paddings και το φίλτρο.
+  \item \textbf{conv2()} Παίρνει ως είσοδο την εικόνα \underline{με} τα paddings και το φίλτρο καθώς
+  και ένα string ``valid'' με το οποίο ζητάμε να γίνει η συνέλιξη όπως την συζητήσαμε και να μην μας
+  επιστρέψει εικόνα ίδιου μεγέθους με αυτή με τα paddings.
+  \item \textbf{convolution()} Παίρνει ως είσοδο την εικόνα \underline{χωρίς} τα paddings και το φίλτρο.
+  Επιστρέφει πάντα εικόνα ίδιου μεγέθους με την αρχική και μέσω ενός string ορίζει την μέθοδο για τα
+  paddings (``replicate'') ή έναν αριθμό (0) για την τιμή των επιπλέων pixel. Τέλος χρειάζεται το string
+  ``conv'' για να κάνει συνέλιξη και όχι καποια άλλη πράξη.
+\end{enumerate}
+
+\section{Ο κώδικας που υλοποίησε τα παραπάνω}
+
+\matlabscript {main}{Η υλοποίηση σε Matlab}
+
+\end{document}

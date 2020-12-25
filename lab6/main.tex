@@ -1,0 +1,135 @@
+\documentclass[11pt]{scrartcl} % Font size
+
+\input{structure.tex} % Include the file specifying the document structure and custom commands
+\input{matlab.tex}
+
+\usepackage{fontspec}
+\setmainfont{Tinos Nerd Font} %nice font for english and greek
+
+\usepackage{hyperref} %for hyperlinks
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\title{
+	\normalfont\normalsize
+	\textsc{Technical University of Crete, ECE}\\ % Your university, school and/or department name(s)
+	\vspace{25pt} % Whitespace
+	\rule{\linewidth}{0.5pt}\\ % Thin top horizontal rule
+	\vspace{20pt} % Whitespace
+	{\Huge Digital Image Processing}\\ % The assignment title
+
+	{\huge Sixth Lab Report}\\ % The assignment title
+	\vspace{12pt} % Whitespace
+	\rule{\linewidth}{2pt}\\ % Thick bottom horizontal rule
+	\vspace{12pt} % Whitespace
+}
+
+\author{\LARGE{Τσιαούσης Χρήστος}\\
+		\texttt{2016030017}
+		\and
+		\LARGE{Πρωτοπαπαδάκης Γιώργος}\\
+		\texttt{2016030134}}% Your name
+
+\date{\normalsize\today} % Today's date (\today) or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+\section{Σκοπός Εργαστηρίου}
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.4\paperwidth]{village.jpg}}
+    \caption{Original Image.}
+\end{figure}
+
+Το εργαστήριο έχει ως σκοπό την περεταίρω εξοικείωση μας με τις έννοιες μορφολογικής επεξεργασίας εικόνας. Πιο συγκεκριμένα καλούμαστε
+να αναγνωρίσουμε μία κατοικημένη περιοχή.
+
+\section{Βήμα 1}
+Επιτυχημένη αναγνώρηση θεωρήσαμε την εμφάνηση κυρίως του περιγράμματος της κατοικημένης περιοχής αλλά και των διάσπαρτων σπιτιών
+που υπάρχουν στα χωράφια. Το καλύτερο αποτέλεσμα για να φαίνονται και τα δύο το βρήκαμε με το κατώφλι να είναι $0.21345$
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{1.jpg}}
+    \caption{Urban detection using binarization.}
+\end{figure}
+\clearpage
+
+\section{UrbanDetec}
+Στην συνέχεια, χρησιμοποιήσαμε την συνάρτηση που μας δίνεται, με παραμέτρους για παράθυρο 3 και για κατώφλι το ίδιο με πριν.
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{2.jpg}}
+    \caption{UrbanDetec Result.}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{3.jpg}}
+    \caption{UrbanDetec Result.}
+\end{figure}
+
+Σε αυτή τη μέθοδο βλέπουμε καλύτερη διαχείριση της πληροφορίας, καθώς η ανάλυση και η επεξεργασία της εικόνας γίνεται σε ένα μικρό παράθυρο
+κάθε φορά. Κι έτσι, σε περιοχές όπου για παράδειγμα το γρασίδι είναι πολύ φωτεινό, αντί να κατηγοριοποιηθεί ως πάνω απο το κατώφλι και να
+πάρουμε όλη την περιοχή, γίνεται πιο αυστηρή κατηγοριοποίηση, και οι πιθανότητες να πάρουμε σωστή αναγνώρηση ενός κτηρίου σε ένα φωτεινό χωράφι, είναι
+μεγαλύτερες.
+\clearpage
+
+\section{Βήμα 3}
+
+Αρχικά υπολογίζουμε τις TOP-Hat και BOT-Hat εικόνες, και επιβεβαιώνουμε το αποτέλεσμα μας μέσω των έτοιμων συναρτήσεων.
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{4.jpg}}
+    \caption{TOP-Hat and BOT-Hat Images.}
+\end{figure}
+
+\clearpage
+Έπειτα τις κανονικοποιούμε μέσω της συνάρτησης \textit{im2double()}. Και κάνουμε binarize βάσει της τεχνικής Otsu.
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{5.jpg}}
+    \caption{bin-TOP-Hat and bin-BOT-Hat Images.}
+\end{figure}
+
+\clearpage
+Μετά τις ``καθαρίζουμε'' χρησιμοποιώντας opening στην TOP-Hat, και opening ακολουθούμενο από closing στην BOT-Hat εικόνα.
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{6.jpg}}
+    \caption{Opened TH and closed BH.}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{7.jpg}}
+    \caption{Final Fused Result.}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=\paperwidth]{fin.jpg}}
+    \caption{Final Fused Result.}
+\end{figure}
+
+\clearpage
+Έχουμε θεωρήσει, λοιπόν, αυτές τις παραμέτρους ιδανικές, καθώς έχουμε ένα αξιοπρεπές περίγραμμα της κατοικημένης περιοχής,
+στο οποίο μπορούμε να εφαρμόσουμε τεχνικές από το προηγούμενο εργαστήριο και να πάρουμε όλο το χωριό ως μια περιοχή. Και παράλληλα,
+έχουμε αναγνωρίσει επιτυχώς, δρόμους και μεμονομένα σπίτια.
+
+\section{Κώδικας}
+\matlabscript {main_6}{Η main.}
+
+\end{document}
