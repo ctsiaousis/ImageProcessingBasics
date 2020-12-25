@@ -4,11 +4,11 @@ The assignments from the `TEL411 – Digital Image Processing` course of [ECE](h
 
 ___  
 ### Fileds  
-* [Interpolations](./lab1/README.md)
-* [2-D Convolution](./lab2/README.md)
-* [Pyramids](./lab3/README.md)
-* [Filters](./lab4/README.md)
-* [Segmentation](./lab5/README.md)
-* [Detection](./lab6/README.md)
-* [Compression](./lab7/README.md)
-* [Toeplitz](./lab8/README.md)
+* [Interpolations](./lab1/)
+* [2-D Convolution](./lab2/)
+* [Pyramids](./lab3/)
+* [Filters](./lab4/)
+* [Segmentation](./lab5/)
+* [Detection](./lab6/)
+* [Compression](./lab7/)
+* [Toeplitz](./lab8/)
