@@ -1,0 +1,107 @@
+clc;
+clear all;
+close all;
+
+%% Design our 1-D input signal
+% and plot a sample quantized signal
+A=255;
+t = (-1.5*A:1.5*A)';
+inS = (abs(t)<=A).*t;
+% tf = uni_scalar(inS,A,4);
+% figure
+% plot(inS,tf,'r');
+% grid on
+% hold on
+% plot(inS,'g');
+
+
+%% Plot 9 levels of quantization
+%keep in mind that desiredL = 2^R
+figure
+levels=9;
+for r=0:levels-1
+    newQ=uni_scalar(inS,A,2^r);
+    subplot(2,5,r+1)
+    plot(t,newQ)
+    grid on
+end
+
+
+%% Quantize `lena_gray_512.tif`
+figure
+lena=imread('lena_gray_512.tif');
+quant_lena=uni_scalar(lena,255,8);
+
+subplot(1,2,1)
+imshow(lena);
+subplot(1,2,2)
+imshow(quant_lena);
+
+levels=9
+tst=zeros(levels,1);
+for r=0:levels-1
+    l = 2^r;
+    q=uni_scalar(lena,255,l);
+    tst(r+1)=immse(lena,q);
+    fprintf('MSE--level-%d :\t%d\n',r, tst(r+1));
+end
+
+figure;
+semilogy(tst)
+
+
+
+%% Part B
+% vidX=VideoReader('xylophone3.mp4');
+
+
+
+%% Part C
+inIm = imread('frame50.png');
+inIm = rgb2gray(inIm);
+inIm = imresize(inIm,[256 256]);
+
+%easier to work with doubles (still display as uint8)
+inIm  =double(inIm);
+imOrig=double(inIm);
+
+% inIm = magic(16);
+% imOrig = inIm;
+imHarAnal = haar2anal( inIm, 2);
+
+figure
+subplot(1,2,1);
+imshow(uint8(imHarAnal));
+
+inIm = haar2syn( imHarAnal, 2);
+subplot(1,2,2);
+imshow(uint8(cat(2, inIm, imOrig)));
+
+
+fprintf('MSE--HAAR :\t%d\n',immse(inIm,imOrig));
+
+%% Entropy
+[r,c] = size(imHarAnal);
+
+enH7 = entropy( imHarAnal(1:r/4  , 1:c/4) );
+enH6 = entropy( imHarAnal(r/4:r/2, 1:c/4) );
+enH5 = entropy( imHarAnal(r/4:r/2, c/4:c/2) );
+enH4 = entropy( imHarAnal(1:r/4  , c/4:c/2) );
+enH3 = entropy( imHarAnal(r/2:r  , 1:c/2) );
+enH2 = entropy( imHarAnal(r/2:r  , c/2:c) );
+enH1 = entropy( imHarAnal(1:r/2  , c/2:c) );
+
+
+enH0 = -sum(count.*log2(count));
+
+
+fprintf('ENTROPY--H7 :\t%d\n',enH7);
+fprintf('ENTROPY--H6 :\t%d\n',enH6);
+fprintf('ENTROPY--H5 :\t%d\n',enH5);
+fprintf('ENTROPY--H4 :\t%d\n',enH4);
+fprintf('ENTROPY--H3 :\t%d\n',enH3);
+fprintf('ENTROPY--H2 :\t%d\n',enH2);
+fprintf('ENTROPY--H1 :\t%d\n',enH1);
+fprintf('ENTROPY--H0 :\t%d\n',enH0);
+
+return;

@@ -1,0 +1,163 @@
+\documentclass[11pt]{scrartcl} % Font size
+
+\input{structure.tex} % Include the file specifying the document structure and custom commands
+\input{matlab.tex}
+
+\usepackage{fontspec}
+\setmainfont{Tinos Nerd Font} %nice font for english and greek
+
+\usepackage{hyperref} %for hyperlinks
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\title{
+	\normalfont\normalsize
+	\textsc{Technical University of Crete, ECE}\\ % Your university, school and/or department name(s)
+	\vspace{25pt} % Whitespace
+	\rule{\linewidth}{0.5pt}\\ % Thin top horizontal rule
+	\vspace{20pt} % Whitespace
+	{\Huge Digital Image Processing}\\ % The assignment title
+
+	{\huge Eighth Lab Report}\\ % The assignment title
+	\vspace{12pt} % Whitespace
+	\rule{\linewidth}{2pt}\\ % Thick bottom horizontal rule
+	\vspace{12pt} % Whitespace
+}
+
+\author{\LARGE{Τσιαούσης Χρήστος}\\
+		\texttt{2016030017}
+		\and
+		\LARGE{Πρωτοπαπαδάκης Γιώργος}\\
+		\texttt{2016030134}}% Your name
+
+\date{\normalsize\today} % Today's date (\today) or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+\section{Σκοπός Εργαστηρίου}
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.4\paperwidth]{cameraman.jpg}}
+    \caption{Original Image.}
+\end{figure}
+
+\textit{Ο Κώδικας βρίσκεται και συγκεντρωτικά στο τελευταίο κεφάλαιο}
+
+\clearpage
+Σκοπός του εργαστηρίου είναι η κατανόηση όλων, πλέον, των μεθόδων συνέλιξης
+στις δύο διαστάσεις.
+
+\section{Υλοποίηση}
+\subsection*{Βήματα 1-2}
+Trivial...
+\matlabscript{1}{Βήματα 1-2}
+
+\subsection*{Βήματα 3-4}
+Το βήμα αυτό υλοποιήθηκε με τις έτοιμες συναρτήσεις του matlab \textit{fft2} και \textit{fftshift}.
+Το μόνο ``περίεργο'' από άποψη υλοποίησης είναι ότι κάναμε zero-pad το σήμα κατά 8 pixel, έτσι ώστε
+να μπορούμε να το πολλαπλασιάσουμε αργότερα με τον φουριέ του φίλτρου και να έχουμε ίδιες διαστάσεις
+με το αποτέλεσμα της συνλελιξης στο πεδίο του χρόνου.
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{1.jpg}}
+    \caption{$I_{new} and \mathcal{F}\{I_{new}\}$}
+\end{figure}
+
+Το σήμα στο πεδίο των συχνοτήτων θυμίζει δύο ορθογώνιους παλμούς raised cosine (ενας επι του xx' κι ένας επι του yy'),
+
+\matlabscript{2}{Βήματα 3-4}
+
+\subsection*{Βήματα 5-6-7}
+Για την δημιουργία του φίλτρου, χρησιμοποιήσαμε την \textit{fspecial}, όπως την είδαμε και στο τρίτο εργαστήριο,
+και για τον μετασχηματισμό, ακολουθήσαμε την ίδια διαδικασία με το βήμα τρία. Αυτό που παρατηρήσαμε από τα meshes,
+αλλά και παίζοντας με την τιμή διασποράς του φίλτρου, είναι ότι ακολουθεί τους κανόνες που ήδη ξέρουμε από τα σήματα
+μίας διάστασης. Δηλαδή, όσο πιο στενό το ``καρφί'' στο χωρικό σήμα, τόσο πιο ``απλωμένο'' και κοντά στην μονάδα το συχνοτικό
+πέπλο.
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{2.jpg}}
+    \caption{Gaussian Filter in spatial and in frequency domain.}
+\end{figure}
+
+\matlabscript{3}{Βήματα 5-6-7}
+
+\subsection*{Βήματα 8-9-10}
+
+Η συνέλιξη δισδιάστατων σημάτων με την συνάρτηση \textit{conv2}, χωρις επιπλέον ορίσματα, υλοποιείται με την τελευταία
+γραμμή του φίλτρου επί την πρώτη του σήματος. Γι αυτό καταλήγουμε με ένα σήμα 38x38. Ευτυχώς, το έχουμε προβλέψει κι έχουμε
+τα σήματα της εικόνας και του φίλτρου με ίδιο μέγεθος στις συχνότητες και χωρίς ολίσθηση. Έτσι, για τον πολλαπλασιασμό, αρκεί να
+πολλαπλασιάσουμε στοιχείο-στοιχείο και έπειτα να κατασκευάσουμε το σήμα στο πεδίο του χώρου χρησιμοποιώντας την \textit{ifft2}.
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{3.jpg}}
+    \caption{Traditional convolution and frequency multiplication.}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{4.jpg}}
+    \caption{Convolution using the Frequency Domain}
+\end{figure}
+\matlabscript{4}{Βήματα 8-9-10}
+
+\subsection*{Βήματα 11-12-13}
+
+Για το βήμα 11, χρησιμοποιήθηκαν μόνο οι συναρτήσεις \textit{zeros(), cell() \& cell2mat()} για convenience στην αποθήκευση
+του toeplitz matrix, καθώς και η \textit{circshift()} για convenience στην δημιουργία των πινάκων $H_n$. Κατά τα άλλα υλοποιήσαμε
+βήμα-βήμα τις σελίδες 15-23 της ένατης διάλεξης, χωρίς την χρήση άλλων συναρτήσεων όπως toeplitz ή convmtx2, και πλέον μπορούμε
+να πούμε με σιγουριά ότι: ναι, όντως η θεωρία στέκει. :ρ
+
+
+\begin{figure}[h]
+    \centering
+    \makebox[\textwidth]{\includegraphics[width=0.6\paperwidth]{5.jpg}}
+    \caption{Toeplitz Matrix as image and Convoluted Image using Toeplitz Matrix.}
+\end{figure}
+
+
+Ήταν μια ευχάριστη σπαζοκεφαλιά, αλλά σίγουρα η τελευταία φορά που κάνουμε συνέλιξη με αυτή την μεθοδολογία.
+Παραθέτουμε το κομμάτι κώδικα και θα συζητήσουμε μετά τα σφάλματα.
+
+\matlabscript{5}{Βήματα 11-12-13}
+
+\section{Συμπεράσματα}
+
+\begin{table}[h] % [h] forces the table to be output where it is defined in the code (it suppresses floating)
+    \centering % Centre the table
+    \begin{tabular}{l c c c}
+        \toprule
+        \textit{σφάλμα} & \textbf{(conv2,ifft2)} & \textbf{(conv2,Toeplitz)} & \textbf{(ifft2,Toeplitz)} \\
+        \midrule
+        \midrule
+        MSE & $1.4\cdot 10^{-27}$ & $1.5\cdot 10^{-27}$ & $1.3\cdot 10^{-27}$ \\
+        \bottomrule
+    \end{tabular}
+    \caption{Τα τελικά σφάλματα.}
+\end{table}
+
+Φαίνεται ότι τα σφάλματα είναι πάρα πολύ μικρά και αυτό μάλλον οφείλεται σε στρογγυλοποιήσεις που κάνει
+το Matlab για floating point αριθμούς κοντά στο μηδέν, ή και στους διαφορετικούς τύπους πινάκων που χρησιμοποιήθηκαν
+σε κάθε μέθοδο. Για επιβεβαίωση, αν κάποιος ήταν ``ψείρας'', θα μπορούσε να βεβαιωθεί ότι σε κάθε βήμα η είσοδος
+είναι \textit{complex double}, για να έχει κοινούς τύπους παντού. Παρ' όλ' αυτά, έχουμε και ζωή και χίλια δυο μαθήματα.
+
+Σε γενικές γραμμές πάντως δεν θεωρούμε ότι οι εικόνες δεν διαφέρουν καθόλου, καθώς το $10^{-27}$ είναι γελοία μικρό νούμερο.
+
+\section{Κώδικας}
+
+\matlabscript {lab8}{Η main.}
+
+
+
+\end{document}
