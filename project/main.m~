@@ -30,14 +30,11 @@ end
 %% Quantize `lena_gray_512.tif`
 figure
 lena=imread('lena_gray_512.tif');
-quant_lena=uni_scalar(lena,255,8);
+quant_lena=uni_scalar(lena,A,8);
 
-subplot(1,2,1)
-imshow(lena);
-subplot(1,2,2)
-imshow(quant_lena);
 
-levels=9
+%illustrate the results
+levels=9;
 tst=zeros(levels,1);
 for r=0:levels-1
     l = 2^r;
@@ -83,16 +80,16 @@ fprintf('MSE--HAAR :\t%d\n',immse(inIm,imOrig));
 %% Entropy
 [r,c] = size(imHarAnal);
 
-enH7 = entropy( imHarAnal(1:r/4  , 1:c/4) );
-enH6 = entropy( imHarAnal(r/4:r/2, 1:c/4) );
-enH5 = entropy( imHarAnal(r/4:r/2, c/4:c/2) );
-enH4 = entropy( imHarAnal(1:r/4  , c/4:c/2) );
-enH3 = entropy( imHarAnal(r/2:r  , 1:c/2) );
-enH2 = entropy( imHarAnal(r/2:r  , c/2:c) );
-enH1 = entropy( imHarAnal(1:r/2  , c/2:c) );
+enH7 = imEntropy( imHarAnal(1:r/4  , 1:c/4) );
+enH6 = imEntropy( imHarAnal(r/4:r/2, 1:c/4) );
+enH5 = imEntropy( imHarAnal(r/4:r/2, c/4:c/2) );
+enH4 = imEntropy( imHarAnal(1:r/4  , c/4:c/2) );
+enH3 = imEntropy( imHarAnal(r/2:r  , 1:c/2) );
+enH2 = imEntropy( imHarAnal(r/2:r  , c/2:c) );
+enH1 = imEntropy( imHarAnal(1:r/2  , c/2:c) );
 
 
-enH0 = -sum(count.*log2(count));
+enH0 = imEntropy( imHarAnal );
 
 
 fprintf('ENTROPY--H7 :\t%d\n',enH7);

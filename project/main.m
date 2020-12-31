@@ -20,9 +20,11 @@ inS = (abs(t)<=A).*t;
 figure
 levels=9;
 for r=0:levels-1
-    newQ=uni_scalar(inS,A,2^r);
+    newQ=uni_scalar(inS,A/2,2^r);
     subplot(2,5,r+1)
     plot(t,newQ)
+    str = sprintf('CharFunc of uni_scalar, r=%d', r);
+    title(str)
     grid on
 end
 
@@ -30,25 +32,26 @@ end
 %% Quantize `lena_gray_512.tif`
 figure
 lena=imread('lena_gray_512.tif');
-quant_lena=uni_scalar(lena,A,8);
 
-subplot(1,2,1)
-imshow(lena);
-subplot(1,2,2)
-imshow(quant_lena);
-
-levels=9
-tst=zeros(levels,1);
+levels=9;
+errors=zeros(levels,1);
 for r=0:levels-1
     l = 2^r;
-    q=uni_scalar(lena,255,l);
-    tst(r+1)=immse(lena,q);
-    fprintf('MSE--level-%d :\t%d\n',r, tst(r+1));
+    q=uni_scalar(lena,A/2,l);
+    errors(r+1)=immse(lena,q);
+    fprintf('MSE--level-%d :\t%d\n',r, errors(r+1));
+    
+    %illustrate the results
+    subplot(2,5,r+1)
+    imagesc(q)
+    colormap gray; colorbar
+    grid on
 end
 
+% plot mserrors
 figure;
-semilogy(tst)
-
+semilogy([0:8],errors)
+grid on
 
 
 %% Part B
@@ -93,6 +96,7 @@ enH1 = imEntropy( imHarAnal(1:r/2  , c/2:c) );
 
 
 enH0 = imEntropy( imHarAnal );
+enOr = imEntropy( imOrig );
 
 
 fprintf('ENTROPY--H7 :\t%d\n',enH7);
@@ -103,5 +107,6 @@ fprintf('ENTROPY--H3 :\t%d\n',enH3);
 fprintf('ENTROPY--H2 :\t%d\n',enH2);
 fprintf('ENTROPY--H1 :\t%d\n',enH1);
 fprintf('ENTROPY--H0 :\t%d\n',enH0);
+fprintf('ENTROPY--ORIG :\t%d\n',enOr);
 
 return;
