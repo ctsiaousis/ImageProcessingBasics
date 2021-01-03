@@ -24,11 +24,11 @@ function OUT_IMAGE = haar2anal( imIn, level )
 %     for dummy=1:level
 %         for i=1:rows
 %             tmp = OUT_IMAGE(i,:);
-%             OUT_IMAGE(i,:) = analysis(tmp,1);
+%             OUT_IMAGE(i,:) = haar1analysis(tmp,1);
 %         end
 %         for l=1:columns
 %             tmp = OUT_IMAGE(:,l)';
-%             OUT_IMAGE(:,l) = analysis(tmp,1)';
+%             OUT_IMAGE(:,l) = haar1analysis(tmp,1)';
 %         end
 %     end
 end

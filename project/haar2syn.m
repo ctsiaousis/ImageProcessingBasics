@@ -23,11 +23,11 @@ function OUT_IMAGE = haar2syn( imIn, level )
 %     for dummy=1:level
 %         for i=1:rows
 %             tmp = OUT_IMAGE(i,:);
-%             OUT_IMAGE(i,:) = synthesis(tmp,1);
+%             OUT_IMAGE(i,:) = haar1synthesis(tmp,1);
 %         end
 %         for l=1:columns
 %             tmp = OUT_IMAGE(:,l)';
-%             OUT_IMAGE(:,l) = synthesis(tmp,1)';
+%             OUT_IMAGE(:,l) = haar1synthesis(tmp,1)';
 %         end
 %     end
 end
