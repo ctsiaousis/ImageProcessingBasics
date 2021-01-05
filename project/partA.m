@@ -2,25 +2,21 @@ function partA()
     fprintf('--------------PART A--------------\n');
     %% Design our 1-D input signal
     A=255;
-    t = (-1.5*A:1.5*A)';
-    inS = (abs(t)<=A).*t;
-    
+    fx = (-A:0.1:A)';
+
     %% Plot 9 levels of quantization
     %keep in mind that desiredL = 2^R
     figure
     levels=9;
     fancy = ['b','k','r','m'];
     for r=0:levels-1
-        newQ = uni_scalar(inS, A/2, 2^r);
+        fxQ = uni_scalar(fx, A/2, 2^r);
         subplot(2, 5, r+1)
-        
-        P1 = plot(t, inS, '--g');
-        hold on
-        P2 = plot(t, newQ, fancy(mod(r,4)+1)); %choose color from fancy array
-        str = sprintf('Charact. Func. of uni_scalar');
+        plot(fx, fxQ, fancy(mod(r,4)+1)); %choose color from fancy array
+        str = sprintf('Char. Func. of uni_scalar');
         title(str,'Interpreter','none')
-        str = sprintf('Quantized with r=%d', r);
-        legend([P1 P2], {'InputSignal',str},'Location',['South','East'])
+        str = sprintf('r=%d', r);
+        legend(str,'Location',['South','East'])
         ylabel('$$\tilde{f}(x)$$', 'Interpreter', 'LaTeX');
         xlabel('$$f(x)$$', 'Interpreter', 'LaTeX');
         grid on
@@ -36,7 +32,7 @@ function partA()
     errors = zeros(levels,1);
     for r=0:levels-1
         l = 2^r;
-        q = uni_scalar(lena,A,l);
+        q = uni_scalar(lena,A/2,l);
         %calculate mean square errors
         errors(r+1)=immse(lena,q);
         rStr = sprintf('r = %d', r);
@@ -46,7 +42,7 @@ function partA()
         %illustrate the images
         subplot(2,5,r+1)
         imagesc(q)
-        colormap gray; colorbar
+        colormap gray; colorbar; caxis([0 255])
         title(rStr)
         grid on
     end

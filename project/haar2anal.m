@@ -2,7 +2,6 @@ function OUT_IMAGE = haar2anal( imIn, level )
     [rows,columns] = size(imIn);
     assert((rows>1 && columns>1),'please input an image');
     OUT_IMAGE = double(imIn);
-
 %% this section wiil apply for the upper left subband of previous level
     for lvl=1:level
         %lvl=1 applies to whole image
