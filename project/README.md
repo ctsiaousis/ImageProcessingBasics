@@ -1,7 +1,6 @@
-# Convolution in Every Form
+# Encoding and Quantization
 
-2-D convolution using the traditional conv2, using the frequency domain and
-also using a low level implementation of the `Toeplitz` matrix.
+Take a look at [here](./Project.pdf)
 
 ##### LaTeX
 
