@@ -12,3 +12,4 @@ ___
 * [Detection](./lab6/)
 * [Compression](./lab7/)
 * [Toeplitz](./lab8/)
+* [Encoding and Quantization](./project/)
